@@ -1,0 +1,16 @@
+4 15
+libro1 21
+libro2 41
+libro3 22
+libro4 10
+libro5 5
+libro6 7
+libro7 9
+libro8 50
+Libro9 11
+libro10 3
+libro11 7
+libro12 1
+libro13 15
+libro14 20
+libro15 5

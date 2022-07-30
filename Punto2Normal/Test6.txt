@@ -1,0 +1,8 @@
+5 7
+libro1 123
+libro2 244
+libro3 176
+libro4 100
+libro5 90
+libro6 220
+libro7 145

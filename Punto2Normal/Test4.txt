@@ -1,0 +1,11 @@
+5 10 
+Libro1 10
+Libro2 4
+Libro3 9
+Libro4 3
+Libro5 11
+Libro6 7
+Libro7 2
+Libro8 22
+Libro9 15
+Libro10 6

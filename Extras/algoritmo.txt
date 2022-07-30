@@ -1,0 +1,42 @@
+if(i == n-1 || j==0){
+
+            if(j == m-1 ){             
+                escritorPs.push(new EscritorP(k, u));
+            }
+            escritor[i] -= libros[j].paginas;
+            u = j;
+            j++;
+
+            if ((escritor[0] - libros[0].paginas < -diferencia)) {
+                escritorPs.push(new EscritorP(k,u));
+                k=1;u=1;
+                j++;
+                
+            }
+        }
+                
+        if ((escritor[i] - libros[j].paginas >= -diferencia) && j!=m-1) {
+            escritor[i] -= libros[j].paginas;
+            u = j;
+            j++;
+            
+        } else {
+            escritorPs.push(new EscritorP(k,u));
+            i++;
+            k = u+1;               
+        }
+        if (j == m) {
+            const primerlibrito = [];
+            const ultimolibrito = [];
+            for (let l = 0; l < escritor.length; l++) {
+                primerlibrito[l].push( escritorPs[l].primerLibro.toString());
+                ultimolibrito[l].push( escritorPs[l].ultimoLibro.toString());
+            }
+            return new Respuesta(dias, primerlibrito, ultimolibrito);
+        }
+
+
+        escritorPs.forEach(function(elemento, indice, array) {
+                    console.log(elemento, indice);
+                })
+    
