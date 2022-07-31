@@ -78,24 +78,14 @@ async function solve(n, procedimientos) {
   let procecitos = [];
   let arrproces = [];
 
-  procedimientos.forEach(function (elemento, indice, array) {
+  /* procedimientos.forEach(function (elemento, indice, array) {
     console.log(elemento, indice);
-  });
-
-  /* 
-    console.log(i + " I");
-    console.log(j + " J");
-    console.log(u + " U");
-    console.log("-------");
-  */
+  }); */
 
   while (true) {
     if (j == procedimientos.length) {
       procecitos.unshift(procedimientos[u].nombre);
       arrproces.push(procecitos.slice());
-      arrproces.forEach(function (elemento, indice) {
-        console.log(elemento, indice);
-      });
       procecitos.splice(0, procecitos.length);
       u += 1;
       i = u;
@@ -105,10 +95,18 @@ async function solve(n, procedimientos) {
     if (u == procedimientos.length) {
       procecitos.unshift(procedimientos[u - 1].nombre);
       arrproces.push(procecitos.slice());
-      console.log(arrproces[0][0] + "Funciona");
       procecitos.splice(0, procecitos.length - 1);
       c = sumaproces(arrproces);
-      return new Respuesta(c, new Hora(0, 0), arrproces); // revisar arrproces
+
+      let final = MayorProce(procedimientos, arrproces);
+
+      //console.log(arrproces[final.index]);
+
+      return new Respuesta(
+        arrproces[final.index].length,
+        new Hora(final.horas, final.minutos),
+        arrproces[final.index]
+      ); // revisar arrproces
     }
 
     if (procedimientos[i].horaFin.hora < procedimientos[j].horaInicio.hora) {
@@ -139,27 +137,82 @@ async function main() {
 }
 
 function MayorProce(procedimientos = [], arrproces = []) {
+  /* arrproces.forEach(function (elemento, indice) {
+    console.log(elemento, indice);
+  }); */
   let mayortiempo = [];
-  let numeroPro = 0;
-  let primera = 0,
-    ultima = 0;
-  for (let index = 0; index < arrproces.length; index++) {
-    for (let finx = 0; finx < arrproces[index].length; finx++) {
-      primera =
-        procedimientos[procedimientos.indexOf(arrproces[index][finx])]
-          .horaInicio.hora;
-      ultima =
-        procedimientos[procedimientos.indexOf(arrproces[index][finx])].horaFin
-          .hora;
-      numeroPro += ultima - primera;
-    }
-    mayortiempo.push(numeroPro);
-  }
-  mayortiempo.sort(function (a, b) {
-    return a - b;
-  });
+  let horas = 0,
+    minutos = 0;
+  let datos;
 
-  return mayortiempo[mayortiempo.length - 1];
+  /* 
+      console.log(arrproces[index][finx] + ": arrproces");
+      console.log(datos.nombre + ": nombrecito"); */
+  for (let index = 0; index < arrproces.length; index++) {
+    //console.log("cambia index");
+    for (let finx = 0; finx < arrproces[index].length; finx++) {
+      //console.log("cambia finx");
+      for (let zinx = 0; zinx < procedimientos.length; zinx++) {
+        datos = procedimientos[zinx];
+        if (arrproces[index][finx] == procedimientos[zinx].nombre) {
+          if (datos.horaInicio.minutos == 0 && datos.horaFin.minutos == 0) {
+            horas += datos.horaFin.hora - datos.horaInicio.hora;
+            minutos = 0;
+          } else if (
+            datos.horaInicio.minutos == 30 &&
+            datos.horaFin.minutos == 0
+          ) {
+            horas += datos.horaFin.hora - 1 - datos.horaInicio.hora;
+            minutos += 30;
+          } else if (
+            datos.horaInicio.minutos == 0 &&
+            datos.horaFin.minutos == 30
+          ) {
+            horas += datos.horaFin.hora - datos.horaInicio.hora;
+            minutos += 30;
+          } else {
+            horas += datos.horaFin.hora - datos.horaInicio.hora;
+            minutos = 0;
+          }
+          /* console.log(
+            "Igual: " +
+              procedimientos[zinx].nombre +
+              " : " +
+              zinx +
+              " Horas: " +
+              horas
+          ); */
+        }
+      }
+    }
+    if (minutos % 60 == 0) {
+      horas += minutos / 60;
+    } else {
+      horas += Math.trunc(minutos / 60);
+      minutos = 30;
+    }
+    mayortiempo.push(new Pos(horas, minutos, index));
+    horas = 0;
+    minutos = 0;
+  }
+  let mayorcito = 0;
+  let mayorhora = 0;
+  for (let j = 0; j < mayortiempo.length; j++) {
+    if (mayortiempo[j].horas >= mayorhora) {
+      mayorhora = mayortiempo[j].horas;
+      mayorcito = mayortiempo[j].index;
+    }
+  } /* 
+  console.log(mayortiempo[mayorcito].horas + ": mayorcito");
+  console.log(mayortiempo[mayorcito].minutos + ": mayorcito");
+  console.log(mayortiempo[mayorcito].index + ": mayorcito"); */
+  return mayortiempo[mayorcito];
+}
+
+function Pos(horas, minutos, index) {
+  this.horas = horas;
+  this.minutos = minutos;
+  this.index = index;
 }
 
 function Respuesta(n, tiempoTotal, nombreProcedimientos) {
