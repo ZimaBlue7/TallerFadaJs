@@ -1,6 +1,7 @@
 """
 Nombres de los archivos de lectura y escritura, modifique como considere.
  """
+import time
 nombreLectura = "inB"
 nombreEscritura = "outB"
 
@@ -13,10 +14,9 @@ class Entrada():
 
 
 class Respuesta():
-    def __init__(self, tiempoTotal, libroQueEmpieza, libroQueTermina):
+    def __init__(self, tiempoTotal, libroQueEmpieza):
         self.tiempoTotal = tiempoTotal
         self.libroQueEmpieza = libroQueEmpieza
-        self.libroQueTermina = libroQueTermina
 
 
 class Libro():
@@ -58,23 +58,63 @@ def output(obj):
     '''
     out = str(obj.tiempoTotal) + "\n"
     for i in range(len(obj.libroQueEmpieza)):
-        out += obj.libroQueEmpieza[i] + " " + obj.libroQueTermina[i] + "\n"
+        out += obj.libroQueEmpieza[i] + " " + "\n"
 
     with open(nombreEscritura+".txt", "w") as f:
         f.write(out)
 
 
 def solve(n, m, libros):
-    """
-    Implementar el algoritmo y devolver un objeto de tipo Respuesta, el cual servirá
-    para imprimir la solución al problema como se requiere en el enunciado.
-    """
-    return Respuesta(0, [], [])
+    
+    pages = []
+
+    for obj in libros:
+        pages.append(obj.paginas)
+    # numberP devuelve el número máximo de páginas que un escritor tiene que copiar.
+
+    def numberP(asignacion):
+        max_pages = -1
+        for escritor in asignacion:
+            max_pages = max(max_pages, sum([pages[book] for book in escritor]))
+            
+        return max_pages
+
+    # La función repartir devuelve la asignación como una lista donde el i-ésimo elemento es una lista de índices de libros asignados al i-ésimo escrito.
+    def repartir(asignacion, escritor, book):
+        
+        if book == m:
+            return numberP(asignacion), asignacion
+
+        assign_actual = [x[:] for x in asignacion]
+        
+        assign_actual[escritor].append(book)
+        
+        actual = repartir(assign_actual, escritor, book + 1)
+        
+        if escritor == n - 1:
+            return actual
+      
+        assign_next = [x[:] for x in asignacion]
+        
+        assign_next[escritor + 1].append(book)
+        
+        next = repartir(assign_next, escritor + 1, book + 1)
+        
+        return min(actual, next)
+
+    initial_asignacion = [[] for x in range(n)]
+    
+    repartir(initial_asignacion, 0, 0)
+    
+    
+
+    return Respuesta(repartir(initial_asignacion, 0, 0), ["(numero de dias, [escritor-->[libros que se le asinaron]]"])
 
 
 def main():
     e = input()
     res = solve(e.n, e.m, e.libros)
+    print(res)
     output(res)
 
 
