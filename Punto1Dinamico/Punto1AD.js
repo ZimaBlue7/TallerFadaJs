@@ -106,7 +106,7 @@ async function solve(n, procedimientos) {
         arrproces[final.index].length,
         new Hora(final.horas, final.minutos),
         arreglo
-      ); // revisar arrproces
+      ); 
     }
 
     if (procedimientos[i].horaFin.hora < procedimientos[j].horaInicio.hora) {
@@ -145,9 +145,7 @@ function MayorProce(arrproces = []) {
   let horas = 0,
     minutos = 0;
   let datos;
-  /* 
-      console.log(arrproces[index][finx] + ": arrproces");
-      console.log(datos.nombre + ": nombrecito"); */
+
   for (let index = 0; index < arrproces.length; index++) {
     //console.log("cambia index");
     for (let finx = 0; finx < arrproces[index].length; finx++) {
@@ -191,10 +189,7 @@ function MayorProce(arrproces = []) {
       mayorhora = mayortiempo[j].horas;
       mayorcito = mayortiempo[j].index;
     }
-  } /* 
-  console.log(mayortiempo[mayorcito].horas + ": mayorcito");
-  console.log(mayortiempo[mayorcito].minutos + ": mayorcito");
-  console.log(mayortiempo[mayorcito].index + ": mayorcito"); */
+  } 
   return mayortiempo[mayorcito];
 }
 
