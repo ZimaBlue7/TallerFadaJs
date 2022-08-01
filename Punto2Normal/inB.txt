@@ -1,10 +1,5 @@
-(N) <- Numero escritores (M) <- cantidad libros
-M Cantidad de libro - paginas
-
---- ejemplo ---
-
 2 4
 libro1 10
 libro2 5
-libro 3 25
-libro 4 19
+libro3 25
+libro4 19

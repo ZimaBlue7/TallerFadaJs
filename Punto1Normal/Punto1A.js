@@ -73,14 +73,13 @@ async function output(obj) {
 async function solve(n, procedimientos) {
   let i = 0,
     u = 0,
-    j = 1,
-    c = 0;
+    j = 1;
   let procecitos = [];
   let arrproces = [];
 
-  /* procedimientos.forEach(function (elemento, indice, array) {
+  procedimientos.forEach(function (elemento, indice, array) {
     console.log(elemento, indice);
-  }); */
+  });
 
   while (true) {
     if (j == procedimientos.length) {
@@ -96,7 +95,6 @@ async function solve(n, procedimientos) {
       procecitos.unshift(procedimientos[u - 1].nombre);
       arrproces.push(procecitos.slice());
       procecitos.splice(0, procecitos.length - 1);
-      c = sumaproces(arrproces);
 
       let final = MayorProce(procedimientos, arrproces);
 
@@ -123,6 +121,8 @@ async function solve(n, procedimientos) {
         procecitos.push(procedimientos[j].nombre);
         i = j;
         j++;
+      } else {
+        j++;
       }
     } else {
       j++;
@@ -131,15 +131,14 @@ async function solve(n, procedimientos) {
 }
 
 async function main() {
+  console.time("t1");
   const p = await input();
   let res = await solve(p.length, p);
   await output(res);
+  console.timeEnd("t1");
 }
 
 function MayorProce(procedimientos = [], arrproces = []) {
-  /* arrproces.forEach(function (elemento, indice) {
-    console.log(elemento, indice);
-  }); */
   let mayortiempo = [];
   let horas = 0,
     minutos = 0;
@@ -187,6 +186,7 @@ function MayorProce(procedimientos = [], arrproces = []) {
     }
     if (minutos % 60 == 0) {
       horas += minutos / 60;
+      minutos = 0;
     } else {
       horas += Math.trunc(minutos / 60);
       minutos = 30;
@@ -225,16 +225,6 @@ function Procedimiento(nombre, horaInicio, horaFin) {
   this.nombre = nombre;
   this.horaInicio = horaInicio;
   this.horaFin = horaFin;
-}
-
-function sumaproces(array = []) {
-  let mayor = array[0].length;
-  for (let index = 1; index < array.length; index++) {
-    if (array[index].length > mayor) {
-      mayor = array[index].length - 1;
-    }
-  }
-  return mayor;
 }
 
 class Hora {
